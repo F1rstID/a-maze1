@@ -28,7 +28,8 @@ class AuthController {
     const transData = {
       essential: req.body.essential === 'true',
       marketing: req.body.marketing === 'true',
-      ...req.body,
+      messageId: req.body.messageId,
+      certNum: req.body.certNum,
     };
     //* 필수약관 미동의시 400번 에러
     if (transData.essential === false)

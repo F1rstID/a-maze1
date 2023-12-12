@@ -35,31 +35,38 @@ class AuthService {
       throw new BadRequestError('인증번호가 올바르지 않습니다.');
     }
 
+    console.log(payload);
+
     //* 사용자의 핸드폰 번호를 db에서 검색
-    const userDto = await this.authRepository.findUser(phoneNumber);
-
-    //* 해당 유저 약관 변경.
-    userDto.essential = payload.essential;
-    userDto.marketing = payload.marketing;
-
-    await this.authRepository.updateTerms(userDto);
+    const findUserDto = await this.authRepository.findUser(phoneNumber);
 
     //* 사용자의 핸드폰 번호로 가입되어있지 않을경우
-    if (!userDto) {
+    if (!findUserDto) {
       payload.phoneNumber = phoneNumber;
       //* 회원가입
       await this.authRepository.signUp(payload);
+    } else {
+      //* 가입 되어 있을 경우
+      //* 해당 유저 약관 변경.
+      findUserDto.essential = payload.essential;
+      findUserDto.marketing = payload.marketing;
+      await this.authRepository.updateTerms(findUserDto);
     }
+
+    // findUserDto 가 false 일때 phoneNumber를 이용하여 user를 Find , true 일때 findUserDto를 그대로 사용
+    const userData = !findUserDto
+      ? await this.authRepository.findUser(phoneNumber)
+      : findUserDto;
 
     //* AccessToken 생성
     const accessToken = jwt.sign(
-      { userId: userDto.id },
+      { userId: userData.id },
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1d' }
     );
 
     //* 인증번호 검증 및 로그인 or 회원가입 성공하여 Logging
-    await this.authRepository.createLog(userDto.id);
+    await this.authRepository.createLog(userData.id);
 
     return { success: true, accessToken };
   };
