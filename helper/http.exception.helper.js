@@ -23,7 +23,7 @@ class Forbidden extends Error {
 class NotFound extends Error {
   constructor(message) {
     super(message);
-    this.name = 'Forbidden';
+    this.name = 'NotFound';
   }
 }
 //* 409

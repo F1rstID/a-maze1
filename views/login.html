@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--    ajax 불러오기   -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script>
+  let messageId = ''
+  // SMS 인증을 위한 함수
+    function sendMessage() {
+      const phoneNumber = document.getElementById('inputPhone').value
+      $.ajax({
+        type: "POST",
+        url: "/api/auth/login",
+        data: {phoneNumber : phoneNumber},
+        success : function (data, textStatus, jqXHR) {
+          messageId = data.sendMessageRes.messageId
+        },
+        error : function (data, textStatus, jqXHR) {
+          console.log(data)
+        }
+    })
+    // request.done(function( data,textStatus, jqXHR ) {
+    //   console.log(data)
+    //   messageId = data.sendMessageRes.messageId
+    // })
+    }
+
+    // SMS 인증번호 확인을 위한 함수
+  function certConfirm() {
+    const phoneNumber = document.getElementById('inputPhone').value
+    const certNum = document.getElementById('inputCert').value
+    $.ajax({
+      type: "POST",
+      url: "/api/auth/cert",
+      data: {messageId : messageId , certNum : certNum},
+      success : function(data,textStatus, jqXHR){
+        if (data.success === true) {
+            window.location.href = '/main'
+        }
+      },
+      error : function(data,textStatus, jqXHR){
+        if (data.responseJSON.errorMessage === '존재하지 않는 회원입니다.') window.location.href = '/terms?' + phoneNumber
+        console.log(data)
+      }
+    })
+  }
+</script>
+    <meta charset="UTF-8">
+    <title>a-maze CodingTest</title>
+</head>
+<body>
+    Phone : <input type="text" id="inputPhone" name="inputPhone" value="01055857044">
+    <button onclick="sendMessage()"> Login </button>
+    Cert : <input type="text" id="inputCert" name="inputCert">
+    <button onclick="certConfirm()"> Cert </button>
+
+</body>
+</html>

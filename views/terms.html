@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--    ajax 불러오기   -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script>
+      // * 이전 페이지에서 받아온 phoneNumber
+      const receivedData = location.href.split('?')[1];
+      console.log(receivedData)
+      function signup () {
+        const isEssentialChecked = document.getElementById('essential').checked
+        const isMarketingChecked = document.getElementById('marketing').checked
+
+        $.ajax({
+          type: "POST",
+          url: "/api/auth/signup",
+          data: {phoneNumber: receivedData, essential: isEssentialChecked, marketing: isMarketingChecked},
+          success : function(data,textStatus, jqXHR){
+            if (data.success === true) {
+              window.location.href = '/main'
+            }
+          },
+          error : function(data,textStatus, jqXHR){
+            console.log(data)
+          }
+        })
+      }
+
+    </script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<div class="terms__check__all">
+    <input type="checkbox" name="checkAll" id="checkAll" />
+    <label for="checkAll">모든 약관에 동의합니다.</label>
+</div>
+<ul class="terms__list">
+    <li class="terms__box">
+        <div class="input__check">
+            <input type="checkbox" name="agreement" id="essential" value="essential" required />
+            <label for="essential" class="required">이용약관 동의(필수)</label>
+        </div>
+        <div class="terms__content">
+            필수 약관 입니다.
+        </div>
+    </li>
+    <li class="terms__box">
+        <div class="input__check">
+            <input type="checkbox" name="agreement" id="marketing" value="marketing" />
+            <label for="marketing">마케팅 활용 동의 및 서비스 관련 정보 수신 동의(선택)</label>
+        </div>
+        <div class="terms__content">
+            마케팅 동의 약관 입니다.
+        </div>
+    </li>
+</ul>
+<button type="submit" class="next-button" onclick="signup()">확인</button>
+</body>
+</html>
