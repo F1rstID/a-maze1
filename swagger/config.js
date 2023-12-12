@@ -8,7 +8,7 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'a-maze CodingTest Api Docs',
     },
-    host: 'localhost:3000',
+    host: 'ec2-43-200-8-38.ap-northeast-2.compute.amazonaws.com',
     basePath: '/',
     securityDefinitions: {
       jwt: {
