@@ -9,11 +9,14 @@ class AuthController {
     this.authService = new AuthService();
   }
 
+  //* SMS 발송
   sendMessage = async (req, res) => {
+    //* Client 에서 발송한 데이터 유효성 검증
     const schema = Joi.object({
       phoneNumber: Joi.string().min(1).max(20).required(),
     });
     const payload = schema.validate(req.body);
+    //* 유효성 에러시 400번 에러
     if (payload.error) throw new BadRequestError(payload.error);
 
     const sendMessageRes = await this.authService.sendMessage(payload.value);
@@ -21,45 +24,38 @@ class AuthController {
   };
 
   cert = async (req, res) => {
+    //* Client 에서 발송한 string type 데이터를 boolean type으로 변경
+    const transData = {
+      essential: req.body.essential === 'true',
+      marketing: req.body.marketing === 'true',
+      ...req.body,
+    };
+    //* 필수약관 미동의시 400번 에러
+    if (transData.essential === false)
+      throw new BadRequestError('필수사항에 동의 하지 않았습니다.');
+
+    //* Client 에서 발송한 데이터 유효성 검증
     const schema = Joi.object({
       messageId: Joi.string().required(),
       certNum: Joi.string().length(6).required(),
-    });
-    const payload = schema.validate(req.body);
-    if (payload.error) throw new BadRequestError(payload.error);
-
-    const certMessageRes = await this.authService.certMessage(payload.value);
-    if (certMessageRes) {
-      res.cookie('Authorization', `Bearer ${certMessageRes.accessToken}`);
-      delete certMessageRes.accessToken;
-      res.status(200).json({ certMessageRes });
-    }
-  };
-
-  signup = async (req, res) => {
-    const transData = {
-      phoneNumber: req.body.phoneNumber,
-      essential: req.body.essential === 'true',
-      marketing: req.body.marketing === 'true',
-    };
-
-    if (transData.essential === false)
-      throw new BadRequestError('필수사항에 동의 하지 않았습니다..');
-
-    const schema = Joi.object({
-      phoneNumber: Joi.string().min(1).max(20).required(),
       essential: Joi.boolean().equal(true).required(),
       marketing: Joi.boolean().required(),
     });
+    const payload = schema.validate(req.body);
 
-    const payload = schema.validate(transData);
-
+    //* 유효성 에러시 400번 에러
     if (payload.error) throw new BadRequestError(payload.error);
 
-    const signupRes = await this.authService.signup(payload.value);
-    res.cookie('Authorization', `Bearer ${signupRes.accessToken}`);
-    delete signupRes.accessToken;
-    res.status(200).json({ ...signupRes });
+    const certMessageRes = await this.authService.certMessage(payload.value);
+    //* Login 또는 Signup 성공시
+    if (certMessageRes) {
+      //* JWT 토큰을 Cookie에 담음
+      res.cookie('Authorization', `Bearer ${certMessageRes.accessToken}`);
+
+      //* Client에 필요치 않은 데이터 삭제
+      delete certMessageRes.accessToken;
+      res.status(200).json({ certMessageRes });
+    }
   };
 }
 

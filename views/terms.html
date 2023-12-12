@@ -7,26 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
       // * 이전 페이지에서 받아온 phoneNumber
-      const receivedData = location.href.split('?')[1];
-      console.log(receivedData)
-      function signup () {
-        const isEssentialChecked = document.getElementById('essential').checked
-        const isMarketingChecked = document.getElementById('marketing').checked
-
-        $.ajax({
-          type: "POST",
-          url: "/api/auth/signup",
-          data: {phoneNumber: receivedData, essential: isEssentialChecked, marketing: isMarketingChecked},
-          success : function(data,textStatus, jqXHR){
-            if (data.success === true) {
-              window.location.href = '/main'
-            }
-          },
-          error : function(data,textStatus, jqXHR){
-            console.log(data)
-          }
-        })
-      }
+      function navigateToLoginPage (){}
 
     </script>
     <meta charset="UTF-8">
@@ -34,10 +15,6 @@
 
 </head>
 <body>
-<div class="terms__check__all">
-    <input type="checkbox" name="checkAll" id="checkAll" />
-    <label for="checkAll">모든 약관에 동의합니다.</label>
-</div>
 <ul class="terms__list">
     <li class="terms__box">
         <div class="input__check">

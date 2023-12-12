@@ -41,7 +41,9 @@
         }
       },
       error : function(data,textStatus, jqXHR){
-        if (data.responseJSON.errorMessage === '존재하지 않는 회원입니다.') window.location.href = '/terms?' + phoneNumber
+        if (data.responseJSON.errorMessage === '존재하지 않는 회원입니다.') {
+          window.location.href = '/terms?' + phoneNumber
+        }
         console.log(data)
       }
     })

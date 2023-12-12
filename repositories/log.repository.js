@@ -7,6 +7,7 @@ class LogRepository {
     this.logModel = LogModel;
   }
 
+  //* 로그인된 사용자의 Log를 찾음
   findMyLogs = async (userId) => {
     const myLogs = await this.logModel.findAll({
       where: { userId },
@@ -28,6 +29,7 @@ class LogRepository {
     return result;
   };
 
+  //* 모든 Log 를 찾음
   findAllLogs = async () => {
     const allLogs = await this.logModel.findAll({
       include: [
@@ -46,6 +48,7 @@ class LogRepository {
     return result;
   };
 
+  //* 핸드폰 번호를 이용하여 Log 검색
   searchLogs = async (phoneNumber) => {
     const searchUser = await this.userModel.findOne({
       where: { phone: phoneNumber },

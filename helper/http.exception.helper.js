@@ -1,3 +1,5 @@
+//* Error를 상속하여 커스텀 Error 생성
+
 //* 400
 class BadRequestError extends Error {
   constructor(message) {

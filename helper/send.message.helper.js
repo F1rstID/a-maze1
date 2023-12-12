@@ -1,3 +1,4 @@
+//* 6자리 랜덤한 숫자 생성
 function generateRandomNumber() {
   const min = 100000;
   const max = 999999;

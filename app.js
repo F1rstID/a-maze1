@@ -8,15 +8,17 @@ const app = express();
 const port = process.env.PORT;
 const viewsPath = __dirname + '/views/';
 
-//* Middleware
+//* Client와 원할하게 통신하기 위한 Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(express.json());
+//* Server의 Api Router
 app.use('/api', indexRouter);
-app.get('/login', (req, res) => {
-  res.sendFile(viewsPath + 'login.html');
+
+//* Client Rendering
+app.get('/cert', (req, res) => {
+  res.sendFile(viewsPath + 'cert.html');
 });
 app.get('/terms', (req, res) => {
   res.sendFile(viewsPath + 'terms.html');

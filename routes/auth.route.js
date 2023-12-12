@@ -6,6 +6,5 @@ const authController = new AuthController();
 
 router.post('/login', authController.sendMessage);
 router.post('/cert', authController.cert);
-router.post('/signup', authController.signup);
 
 module.exports = router;
