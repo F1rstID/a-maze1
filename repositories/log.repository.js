@@ -30,6 +30,7 @@ class LogRepository {
   };
 
   //* 모든 Log 를 찾음
+
   findAllLogs = async () => {
     const allLogs = await this.logModel.findAll({
       include: [

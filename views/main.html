@@ -1,79 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <!--    ajax 불러오기   -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
-        function myLogs() {
-          $.ajax({
-            type: "GET",
-            url: "/api/log/me",
-            data: {},
-            success : function(data,textStatus, jqXHR){
-              $('#mainBox').empty()
-              data.myLogRes.forEach((v,i) => {
-                $('#mainBox').append(`<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`)
-              })
-            },
-            error : function(data,textStatus, jqXHR){
-              console.log(data)
-              $('#mainBox').empty()
-            }
-          })
-        }
-        function allLogs() {
-          $.ajax({
-            type: "GET",
-            url: "/api/log/all",
-            data: {},
-            success : function(data,textStatus, jqXHR){
-              $('#mainBox').empty()
-              data.allLogRes.forEach((v,i) => {
-                $('#mainBox').append(`<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`)
-              })
-            },
-            error : function(data,textStatus, jqXHR){
-              $('#mainBox').empty()
-            }
-          })
-        }
-        function searchLogs() {
-          const phoneNumber = document.getElementById('inputPhone').value
-          $.ajax({
-            type: "GET",
-            url: "/api/log/search?phoneNumber=" + phoneNumber,
-            data: {},
-            success : function(data,textStatus, jqXHR){
-              $('#mainBox').empty()
-              data.searchLogRes.forEach((v,i) => {
-                $('#mainBox').append(`<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`)
-              })
-
-            },
-            error : function(data,textStatus, jqXHR){
-              console.log(data)
-              $('#mainBox').empty()
-            }
-          })
-
-        }
+      function myLogs() {
+        $.ajax({
+          type: 'GET',
+          url: '/api/log/me',
+          data: {},
+          success: function (data, textStatus, jqXHR) {
+            $('#mainBox').empty();
+            data.myLogRes.forEach((v, i) => {
+              $('#mainBox').append(
+                `<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`
+              );
+            });
+          },
+          error: function (data, textStatus, jqXHR) {
+            console.log(data);
+            $('#mainBox').empty();
+          },
+        });
+      }
+      function allLogs() {
+        $.ajax({
+          type: 'GET',
+          url: '/api/log/all',
+          data: {},
+          success: function (data, textStatus, jqXHR) {
+            $('#mainBox').empty();
+            data.allLogRes.forEach((v, i) => {
+              $('#mainBox').append(
+                `<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`
+              );
+            });
+          },
+          error: function (data, textStatus, jqXHR) {
+            $('#mainBox').empty();
+          },
+        });
+      }
+      function searchLogs() {
+        const phoneNumber = document.getElementById('inputPhone').value;
+        $.ajax({
+          type: 'GET',
+          url: '/api/log/search?phoneNumber=' + phoneNumber,
+          data: {},
+          success: function (data, textStatus, jqXHR) {
+            $('#mainBox').empty();
+            data.searchLogRes.forEach((v, i) => {
+              $('#mainBox').append(
+                `<ul> No : ${i} | PhoneNumber : ${v.phoneNumber} | LoggedAt : ${v.loggedAt} </ul> <br>`
+              );
+            });
+          },
+          error: function (data, textStatus, jqXHR) {
+            console.log(data);
+            $('#mainBox').empty();
+          },
+        });
+      }
     </script>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Title</title>
 </head>
 <body>
-<div style="display: flex; flex-direction: column">
-메인페이지
-    <div>
-        <button type="button" onclick="myLogs()">나의 로그 확인하기</button>
-
-        <button type="button" onclick="allLogs()">전체 로그 확인하기</button>
-        <br>
-        <input type="text" name="inputPhone" id="inputPhone">
-        <button type="button" onclick="searchLogs()">전화번호로 로그 검색하기</button>
+<div style="display: flex; flex-direction: column; align-items: center">
+    <h2>메인페이지</h2>
+    <div
+            style="
+          margin-bottom: 20px;
+          width: 320px;
+          display: flex;
+          flex-direction: column;
+        "
+    >
+        <div
+                style="
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+          "
+        >
+            <button type="button" onclick="myLogs()" style="width: 49%">
+                나의 로그
+            </button>
+            <button type="button" onclick="allLogs()" style="width: 49%">
+                전체 로그
+            </button>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+            <input
+                    type="text"
+                    name="inputPhone"
+                    id="inputPhone"
+                    style="width: 180px"
+            />
+            <button type="button" onclick="searchLogs()">
+                전화번호로 로그 검색
+            </button>
+        </div>
     </div>
-    <div id="mainBox"/>
+    <div id="mainBox" />
 </div>
 </body>
 </html>

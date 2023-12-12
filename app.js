@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const indexRouter = require('./routes/index.js');
 const httpExceptionHandler = require('./middlewares/http.exception.middleware');
+const { swaggerUi, swaggerSpecs } = require('./swagger/config');
 
 const app = express();
 const port = process.env.PORT;
@@ -26,6 +27,8 @@ app.get('/terms', (req, res) => {
 app.get('/main', (req, res) => {
   res.sendFile(viewsPath + 'main.html');
 });
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 //* Error 핸들링을 위한 Middleware
 app.use(httpExceptionHandler);

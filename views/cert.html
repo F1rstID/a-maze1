@@ -48,12 +48,10 @@
             marketing: marketing,
           },
           success: function (data, textStatus, jqXHR) {
-            if (data.success === true) {
               window.location.href = '/main';
-            }
           },
           error: function (data, textStatus, jqXHR) {
-            console.log(textStatus);
+            console.log(data);
           },
         });
       }
